@@ -10,10 +10,21 @@ config_version=5
 
 [application]
 
-config/name="Gmtk 2023"
+config/name="Sit Upon the Throne"
 config/features=PackedStringArray("4.1", "Mobile")
 config/icon="res://icon.svg"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
+[layer_names]
+
+3d_physics/layer_1="general"
+3d_physics/layer_2="floor_default"
+3d_physics/layer_3="walls_default"
+3d_physics/layer_4="ai_player"
+
 [rendering]
 
-renderer/rendering_method="mobile"
+lights_and_shadows/use_physical_light_units=true

@@ -1,0 +1,69 @@
+[gd_scene load_steps=8 format=3 uid="uid://dd1aggl0f8rcc"]
+
+[ext_resource type="PackedScene" uid="uid://cwwipm1co5bqr" path="res://scenes/gameplay/health_object/health_object.tscn" id="1_vas8o"]
+[ext_resource type="Script" path="res://scenes/gameplay/health_object/ai_player/ai_player.gd" id="2_ojmao"]
+[ext_resource type="PackedScene" uid="uid://68uljn55icbb" path="res://assets/visual/models/ai_player.blend" id="3_c6nlg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7500r"]
+metallic = 1.0
+roughness = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ik4wa"]
+radius = 0.4
+
+[sub_resource type="SphereMesh" id="SphereMesh_wp8jh"]
+radius = 0.1
+height = 0.2
+radial_segments = 16
+rings = 8
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_2l06s"]
+height = 1.0
+radius = 0.4
+
+[node name="AI_Player" instance=ExtResource("1_vas8o")]
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("2_ojmao")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+material_override = SubResource("StandardMaterial3D_7500r")
+
+[node name="ai_player" parent="MeshInstance3D" index="0" instance=ExtResource("3_c6nlg")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.1, 0)
+
+[node name="AI" parent="MeshInstance3D/ai_player" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_7500r")
+
+[node name="Detection" type="Area3D" parent="MeshInstance3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+collision_layer = 0
+collision_mask = 0
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Detection" index="0"]
+shape = SubResource("SphereShape3D_ik4wa")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+visible = false
+mesh = SubResource("SphereMesh_wp8jh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_2l06s")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." index="2"]
+path_desired_distance = 0.5
+target_desired_distance = 0.25
+path_height_offset = 0.5
+avoidance_enabled = true
+neighbor_distance = 30.0
+time_horizon_agents = 3.0
+max_speed = 2.0
+avoidance_layers = 0
+
+[connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]
+
+[editable path="MeshInstance3D/ai_player"]

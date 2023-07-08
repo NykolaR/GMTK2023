@@ -1,0 +1,86 @@
+[gd_scene load_steps=2 format=3 uid="uid://rnx6c3ukghw1"]
+
+[ext_resource type="PackedScene" uid="uid://c0ykikkdjreaq" path="res://scenes/gameplay/debug/debug.tscn" id="1_km5sn"]
+
+[node name="GameplayManager" type="Node"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 0.5545
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 860
+dragger_visibility = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HSplitContainer"]
+layout_mode = 2
+stretch = true
+
+[node name="Gameplay" type="SubViewport" parent="HSplitContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(860, 648)
+render_target_update_mode = 4
+
+[node name="Debug" parent="HSplitContainer/SubViewportContainer/Gameplay" instance=ExtResource("1_km5sn")]
+
+[node name="HBox" type="HBoxContainer" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="HSplitContainer/HBox"]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+color = Color(0.211765, 0.211765, 0.211765, 1)
+
+[node name="VSplitContainer" type="VSplitContainer" parent="HSplitContainer/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+split_offset = -130
+dragger_visibility = 2
+
+[node name="AspectRatioContainer" type="Control" parent="HSplitContainer/HBox/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HSplitContainer/HBox/VSplitContainer/AspectRatioContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="CharacterRender" type="SubViewport" parent="HSplitContainer/HBox/VSplitContainer/AspectRatioContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(285, 194)
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="HSplitContainer/HBox/VSplitContainer/AspectRatioContainer/SubViewportContainer/CharacterRender"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="GridContainer" type="GridContainer" parent="HSplitContainer/HBox/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 4
