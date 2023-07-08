@@ -1,8 +1,47 @@
-[gd_scene load_steps=2 format=3 uid="uid://rnx6c3ukghw1"]
+[gd_scene load_steps=10 format=3 uid="uid://rnx6c3ukghw1"]
 
+[ext_resource type="Script" path="res://scenes/gameplay/manager/gameplay_manager.gd" id="1_gvdux"]
 [ext_resource type="PackedScene" uid="uid://c0ykikkdjreaq" path="res://scenes/gameplay/debug/debug.tscn" id="1_km5sn"]
+[ext_resource type="Texture2D" uid="uid://dnsr5u4ur6pgq" path="res://icon.svg" id="2_22rbg"]
+[ext_resource type="PackedScene" uid="uid://gfedivqtnsgh" path="res://scenes/gameplay/manager/hud/placement_list.tscn" id="2_iy375"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_0omxc"]
+geometry_source_geometry_mode = 1
+cell_size = 0.1
+agent_radius = 0.1
+filter_ledge_spans = true
+
+[sub_resource type="Gradient" id="Gradient_p53jo"]
+offsets = PackedFloat32Array(0, 0.897059)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_uahcy"]
+gradient = SubResource("Gradient_p53jo")
+width = 1
+height = 16
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8j5ae"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 1, 1, 0.0117647)
+albedo_texture = SubResource("GradientTexture2D_uahcy")
+emission_enabled = true
+emission = Color(0, 0.917647, 1, 1)
+emission_intensity = 25.0
+texture_filter = 0
+texture_repeat = false
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_s0gq8"]
+height = 1.0
+radial_segments = 16
+rings = 1
+cap_top = false
+cap_bottom = false
 
 [node name="GameplayManager" type="Node"]
+script = ExtResource("1_gvdux")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 15
@@ -34,14 +73,24 @@ stretch = true
 
 [node name="Gameplay" type="SubViewport" parent="HSplitContainer/SubViewportContainer"]
 handle_input_locally = false
+physics_object_picking = true
 size = Vector2i(860, 648)
 render_target_update_mode = 4
 
 [node name="Debug" parent="HSplitContainer/SubViewportContainer/Gameplay" instance=ExtResource("1_km5sn")]
 
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
+navigation_mesh = SubResource("NavigationMesh_0omxc")
+
+[node name="Highlight" type="MeshInstance3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+material_override = SubResource("StandardMaterial3D_8j5ae")
+mesh = SubResource("CylinderMesh_s0gq8")
+
 [node name="HBox" type="HBoxContainer" parent="HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 0
 
 [node name="ColorRect" type="ColorRect" parent="HSplitContainer/HBox"]
 custom_minimum_size = Vector2(3, 0)
@@ -51,7 +100,8 @@ color = Color(0.211765, 0.211765, 0.211765, 1)
 [node name="VSplitContainer" type="VSplitContainer" parent="HSplitContainer/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-split_offset = -130
+theme_override_constants/separation = 0
+split_offset = -450
 dragger_visibility = 2
 
 [node name="AspectRatioContainer" type="Control" parent="HSplitContainer/HBox/VSplitContainer"]
@@ -69,7 +119,7 @@ stretch = true
 
 [node name="CharacterRender" type="SubViewport" parent="HSplitContainer/HBox/VSplitContainer/AspectRatioContainer/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(285, 194)
+size = Vector2i(289, 198)
 render_target_update_mode = 4
 
 [node name="ColorRect" type="ColorRect" parent="HSplitContainer/HBox/VSplitContainer/AspectRatioContainer/SubViewportContainer/CharacterRender"]
@@ -80,7 +130,23 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="GridContainer" type="GridContainer" parent="HSplitContainer/HBox/VSplitContainer"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/HBox/VSplitContainer/AspectRatioContainer/SubViewportContainer/CharacterRender"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_22rbg")
+stretch_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/HBox/VSplitContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PlacementList" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer" instance=ExtResource("2_iy375")]
 layout_mode = 2
 size_flags_vertical = 3
-columns = 4

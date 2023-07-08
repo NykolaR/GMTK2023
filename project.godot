@@ -11,8 +11,15 @@ config_version=5
 [application]
 
 config/name="Sit Upon the Throne"
+config/tags=PackedStringArray("gamejam", "solo")
+run/main_scene="res://scenes/gameplay/manager/gameplay_manager.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Craftables="*res://scenes/autoload/craftables.gd"
+Helper="*res://scenes/autoload/helper.gd"
 
 [display]
 
