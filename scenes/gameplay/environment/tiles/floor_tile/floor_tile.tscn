@@ -19,7 +19,8 @@ uv1_world_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_xsku0"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_61fqr"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_v4o2n"]
+size = Vector3(1, 0.2, 1)
 
 [node name="FloorTile" type="StaticBody3D" groups=["navigation_mesh_source_group"]]
 collision_layer = 2
@@ -30,4 +31,5 @@ material_override = SubResource("ORMMaterial3D_y6mwe")
 mesh = SubResource("BoxMesh_xsku0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_61fqr")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_v4o2n")

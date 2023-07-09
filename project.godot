@@ -31,6 +31,9 @@ window/stretch/mode="canvas_items"
 3d_physics/layer_2="floor_default"
 3d_physics/layer_3="walls_default"
 3d_physics/layer_4="ai_player"
+3d_physics/layer_5="hole"
+3d_physics/layer_6="placed_object"
+3d_physics/layer_7="enemy"
 
 [rendering]
 

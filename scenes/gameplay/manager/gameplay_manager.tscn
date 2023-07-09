@@ -1,14 +1,18 @@
-[gd_scene load_steps=10 format=3 uid="uid://rnx6c3ukghw1"]
+[gd_scene load_steps=15 format=3 uid="uid://rnx6c3ukghw1"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/manager/gameplay_manager.gd" id="1_gvdux"]
-[ext_resource type="PackedScene" uid="uid://c0ykikkdjreaq" path="res://scenes/gameplay/debug/debug.tscn" id="1_km5sn"]
 [ext_resource type="Texture2D" uid="uid://dnsr5u4ur6pgq" path="res://icon.svg" id="2_22rbg"]
 [ext_resource type="PackedScene" uid="uid://gfedivqtnsgh" path="res://scenes/gameplay/manager/hud/placement_list.tscn" id="2_iy375"]
+[ext_resource type="Script" path="res://scenes/gameplay/manager/CameraPivot.gd" id="2_l7kd6"]
+[ext_resource type="PackedScene" uid="uid://bqomccg1p472j" path="res://scenes/gameplay/environment/base_room/base_room.tscn" id="2_q31yr"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_0omxc"]
+sample_partition_type = 1
+geometry_parsed_geometry_type = 1
 geometry_source_geometry_mode = 1
 cell_size = 0.1
-agent_radius = 0.1
+agent_radius = 0.2
+detail_sample_distance = 0.5
 filter_ledge_spans = true
 
 [sub_resource type="Gradient" id="Gradient_p53jo"]
@@ -39,6 +43,31 @@ radial_segments = 16
 rings = 1
 cap_top = false
 cap_bottom = false
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pxs3u"]
+size = Vector3(1.5, 0.5, 1.5)
+
+[sub_resource type="Environment" id="Environment_rrba7"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.231373, 0.301961, 0.360784, 1)
+ambient_light_energy = 5.0
+tonemap_mode = 3
+tonemap_white = 16.0
+ssao_enabled = true
+sdfgi_read_sky_light = false
+sdfgi_cascades = 2
+sdfgi_min_cell_size = 0.78125
+sdfgi_cascade0_distance = 50.0
+sdfgi_max_distance = 200.0
+glow_enabled = true
+volumetric_fog_density = 0.0
+adjustment_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0wl48"]
+size = Vector3(2, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7attw"]
 
 [node name="GameplayManager" type="Node"]
 script = ExtResource("1_gvdux")
@@ -77,15 +106,87 @@ physics_object_picking = true
 size = Vector2i(860, 648)
 render_target_update_mode = 4
 
-[node name="Debug" parent="HSplitContainer/SubViewportContainer/Gameplay" instance=ExtResource("1_km5sn")]
+[node name="RoomHolder" type="Node3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
+
+[node name="BaseRoom" parent="HSplitContainer/SubViewportContainer/Gameplay/RoomHolder" instance=ExtResource("2_q31yr")]
+
+[node name="PlacedHolder" type="Node3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
+process_mode = 4
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
 navigation_mesh = SubResource("NavigationMesh_0omxc")
 
 [node name="Highlight" type="MeshInstance3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+visible = false
 material_override = SubResource("StandardMaterial3D_8j5ae")
 mesh = SubResource("CylinderMesh_s0gq8")
+
+[node name="BuildCheck" type="Area3D" parent="HSplitContainer/SubViewportContainer/Gameplay/Highlight"]
+collision_layer = 0
+collision_mask = 32
+input_ray_pickable = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HSplitContainer/SubViewportContainer/Gameplay/Highlight/BuildCheck"]
+shape = SubResource("BoxShape3D_pxs3u")
+
+[node name="Pivot" type="Node3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
+script = ExtResource("2_l7kd6")
+
+[node name="Camera3D" type="Camera3D" parent="HSplitContainer/SubViewportContainer/Gameplay/Pivot"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 31, 30)
+current = true
+fov = 15.0
+far = 75.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="HSplitContainer/SubViewportContainer/Gameplay"]
+environment = SubResource("Environment_rrba7")
+
+[node name="Lighting" type="Node3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="HSplitContainer/SubViewportContainer/Gameplay/Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -2)
+light_intensity_lumens = 75.0
+light_temperature = 3000.0
+shadow_enabled = true
+omni_range = 7.5
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="HSplitContainer/SubViewportContainer/Gameplay/Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, 2)
+light_intensity_lumens = 75.0
+light_temperature = 3000.0
+shadow_enabled = true
+omni_range = 7.5
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="HSplitContainer/SubViewportContainer/Gameplay/Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 2, -2)
+light_intensity_lumens = 75.0
+light_temperature = 3000.0
+shadow_enabled = true
+omni_range = 7.5
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="HSplitContainer/SubViewportContainer/Gameplay/Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 2, 2)
+light_intensity_lumens = 75.0
+light_temperature = 3000.0
+shadow_enabled = true
+omni_range = 7.5
+
+[node name="ProgressArea" type="Area3D" parent="HSplitContainer/SubViewportContainer/Gameplay"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+collision_layer = 0
+collision_mask = 8
+input_ray_pickable = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HSplitContainer/SubViewportContainer/Gameplay/ProgressArea"]
+shape = SubResource("BoxShape3D_0wl48")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HSplitContainer/SubViewportContainer/Gameplay/ProgressArea"]
+visible = false
+mesh = SubResource("SphereMesh_7attw")
+skeleton = NodePath("../..")
 
 [node name="HBox" type="HBoxContainer" parent="HSplitContainer"]
 layout_mode = 2
@@ -144,9 +245,43 @@ layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer"]
+[node name="Panel" type="Panel" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer/Panel"]
+layout_mode = 2
+offset_right = 289.0
+offset_bottom = 26.0
+alignment = 1
+
+[node name="Budget" type="Label" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Budget"
+
+[node name="BudgetValue" type="Label" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer/Panel/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "$50"
+horizontal_alignment = 2
 
 [node name="PlacementList" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer" instance=ExtResource("2_iy375")]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Confirm" type="HBoxContainer" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="ConfirmButton" type="Button" parent="HSplitContainer/HBox/VSplitContainer/VBoxContainer/PanelContainer/Confirm"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CONFIRM ROOM LAYOUT"
+
+[connection signal="body_entered" from="HSplitContainer/SubViewportContainer/Gameplay/ProgressArea" to="." method="_on_progress_area_body_entered"]
+[connection signal="pressed" from="HSplitContainer/HBox/VSplitContainer/VBoxContainer/PanelContainer/Confirm/ConfirmButton" to="." method="_on_confirm_button_pressed"]

@@ -1,0 +1,130 @@
+[gd_scene load_steps=11 format=3 uid="uid://cquhvhk388ayh"]
+
+[ext_resource type="PackedScene" uid="uid://cwwipm1co5bqr" path="res://scenes/gameplay/health_object/health_object.tscn" id="1_had8j"]
+[ext_resource type="Script" path="res://scenes/gameplay/health_object/placeables/melee/grunt.gd" id="2_acqku"]
+[ext_resource type="PackedScene" uid="uid://6xayjesdau4f" path="res://assets/visual/models/grunts.blend" id="3_go144"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fnagt"]
+metallic = 1.0
+roughness = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0770y"]
+radius = 0.4
+
+[sub_resource type="SphereMesh" id="SphereMesh_oi0d2"]
+radius = 0.1
+height = 0.2
+radial_segments = 16
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ul4ar"]
+albedo_color = Color(1, 0.690196, 0.956863, 1)
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 1.0
+subsurf_scatter_skin_mode = true
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_seivh"]
+height = 1.0
+radius = 0.3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8wiwl"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bw2ek"]
+radius = 2.0
+
+[node name="GruntSmall" groups=["enemy"] instance=ExtResource("1_had8j")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+collision_layer = 65
+collision_mask = 13
+script = ExtResource("2_acqku")
+SPEED = 2.5
+DAMAGE = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="0"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0.4, 0)
+material_override = SubResource("StandardMaterial3D_fnagt")
+
+[node name="Detection" type="Area3D" parent="MeshInstance3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+collision_layer = 0
+collision_mask = 8
+input_ray_pickable = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Detection" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.18557e-08, 0, -0.125)
+shape = SubResource("SphereShape3D_0770y")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+visible = false
+mesh = SubResource("SphereMesh_oi0d2")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="MeshInstance3D" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+light_intensity_lumens = 10.0
+light_temperature = 5000.0
+
+[node name="grunts" parent="MeshInstance3D" index="3" instance=ExtResource("3_go144")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="Skeleton3D" parent="MeshInstance3D/grunts/Armature" index="0"]
+bones/0/position = Vector3(-0.0713893, 6.60622e-11, 4.1655e-16)
+bones/0/rotation = Quaternion(-2.52782e-08, -3.12794e-08, -0.0356266, 0.999365)
+bones/5/rotation = Quaternion(0.326254, 0.00202393, -0.0510045, 0.943903)
+bones/6/rotation = Quaternion(0.0999213, 0.0666303, -0.245783, 0.961856)
+bones/10/rotation = Quaternion(-0.297067, 0.00679459, -0.0350897, 0.954187)
+bones/11/rotation = Quaternion(-0.140119, 0.00405312, -0.016394, 0.989991)
+bones/14/position = Vector3(-0.0618501, -2.48874e-11, -1.31096e-10)
+bones/16/rotation = Quaternion(-0.0147238, 0.00101138, -0.00909361, 0.99985)
+bones/18/position = Vector3(-0.0618502, 1.59909e-10, 3.37671e-10)
+bones/18/rotation = Quaternion(0.883032, -0.0438501, -0.023175, -0.466685)
+bones/20/rotation = Quaternion(-0.0147238, -0.00101177, 0.0090936, 0.99985)
+
+[node name="AI" parent="MeshInstance3D/grunts/Armature/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ul4ar")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_seivh")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." index="2"]
+target_desired_distance = 0.1
+path_height_offset = 0.5
+path_max_distance = 2.01
+path_postprocessing = 1
+avoidance_enabled = true
+radius = 0.1
+time_horizon_agents = 3.0
+time_horizon_obstacles = 0.25
+max_speed = 2.0
+avoidance_layers = 2
+avoidance_mask = 3
+
+[node name="Placed" type="Area3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+disable_mode = 2
+collision_layer = 32
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Placed" index="0"]
+shape = SubResource("BoxShape3D_8wiwl")
+
+[node name="PlayerDetect" type="Area3D" parent="." index="4"]
+collision_layer = 0
+collision_mask = 8
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerDetect" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1)
+shape = SubResource("SphereShape3D_bw2ek")
+
+[connection signal="body_entered" from="MeshInstance3D/Detection" to="." method="_on_player_detect_body_entered"]
+[connection signal="body_exited" from="MeshInstance3D/Detection" to="." method="_on_player_detect_body_exited"]
+[connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]
+[connection signal="body_entered" from="PlayerDetect" to="." method="_on_player_detect_body_entered"]
+[connection signal="body_exited" from="PlayerDetect" to="." method="_on_player_detect_body_exited"]
+
+[editable path="MeshInstance3D/grunts"]

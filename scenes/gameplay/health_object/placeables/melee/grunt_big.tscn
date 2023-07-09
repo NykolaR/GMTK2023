@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://di6802kqlb7mv"]
+
+[ext_resource type="PackedScene" uid="uid://cwwipm1co5bqr" path="res://scenes/gameplay/health_object/health_object.tscn" id="1_o4cpj"]
+
+[node name="GruntBig" instance=ExtResource("1_o4cpj")]

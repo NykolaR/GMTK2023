@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://68uljn55icbb"
-path="res://.godot/imported/ai_player.blend-733b88592cdd0d45de38a209d9f01dec.scn"
+uid="uid://6xayjesdau4f"
+path="res://.godot/imported/grunts.blend-137e6d01b715362170755f06f77c026e.scn"
 
 [deps]
 
-source_file="res://assets/visual/models/ai_player.blend"
-dest_files=["res://.godot/imported/ai_player.blend-733b88592cdd0d45de38a209d9f01dec.scn"]
+source_file="res://assets/visual/models/grunts.blend"
+dest_files=["res://.godot/imported/grunts.blend-137e6d01b715362170755f06f77c026e.scn"]
 
 [params]
 
@@ -18,7 +18,7 @@ nodes/root_name="Scene Root"
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 meshes/ensure_tangents=true
-meshes/generate_lods=true
+meshes/generate_lods=false
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 meshes/lightmap_texel_size=0.2
@@ -30,10 +30,10 @@ animation/remove_immutable_tracks=true
 import_script/path=""
 _subresources={
 "animations": {
-"RoboAttack": {
+"GruntDed": {
 "save_to_file/enabled": true,
-"save_to_file/keep_custom_tracks": true,
-"save_to_file/path": "res://scenes/gameplay/health_object/ai_player/attack_anim.res",
+"save_to_file/keep_custom_tracks": "",
+"save_to_file/path": "res://scenes/gameplay/health_object/placeables/melee/grunt_ded_anim.res",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,

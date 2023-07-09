@@ -1,9 +1,6 @@
 extends Node3D
 
 
-@onready var _highlight: Node3D = $HSplitContainer/SubViewportContainer/Gameplay/Highlight as Node3D
-
-
 func _ready() -> void:
 	for i in $FloorGrid.get_children().size():
 		for j in $FloorGrid.get_child(i).get_children().size():

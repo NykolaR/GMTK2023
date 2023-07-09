@@ -6,6 +6,9 @@ extends CharacterBody3D
 @onready var health: int = max_health: set = set_health
 
 
+var _impulse: Vector3 = Vector3.ZERO
+
+
 func set_health(new: int) -> void:
 	if health == 0 or new <= 0:
 		health = 0
@@ -21,10 +24,15 @@ func set_health(new: int) -> void:
 		hit()
 
 
+func _physics_process(delta: float) -> void:
+	velocity += _impulse
+	_impulse = _impulse.move_toward(Vector3.ZERO, delta * 5.0)
+
+
 # to be overwridden
 # mostly for visual effects on hit
-func hit() -> void:
-	pass
+func hit(impulse: Vector3 = Vector3.ZERO) -> void:
+	_impulse += impulse
 
 
 # to be overwridden
